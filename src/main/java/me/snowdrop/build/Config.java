@@ -16,6 +16,10 @@ public class Config {
   private List<String> repos = new ArrayList<>();
   private Branch branch;
 
+  public String getRoot() {
+    return root;
+  }
+
   public List<String> getRepos() {
     return repos;
   }
@@ -32,9 +36,7 @@ public class Config {
     String reposFile = findArg(args, false, "-r", "-repos");
     if (reposFile != null) {
       File file = new File(reposFile);
-      if (file.exists() == false || file.isDirectory()) {
-        throw new IllegalArgumentException("No such file: " + file);
-      }
+      check(file);
       stream = new FileInputStream(file);
     } else {
       stream = Config.class.getClassLoader().getResourceAsStream("default.properties");
@@ -60,6 +62,12 @@ public class Config {
     }
 
     return config;
+  }
+
+  static void check(File file) {
+    if (file.exists() == false || file.isDirectory()) {
+      throw new IllegalArgumentException("No such file: " + file);
+    }
   }
 
   private static void check(String msg, Object value) {
