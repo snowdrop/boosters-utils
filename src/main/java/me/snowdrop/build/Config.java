@@ -33,10 +33,10 @@ public class Config {
     config.branch = Branch.valueOf(findArg(args, true, "-b", "-branch").toUpperCase());
 
     InputStream stream;
-    String reposFile = findArg(args, false, "-r", "-repos");
+    String reposFile = findArg(args, false, "-p", "-props");
     if (reposFile != null) {
       File file = new File(reposFile);
-      check(file);
+      check(file, true);
       stream = new FileInputStream(file);
     } else {
       stream = Config.class.getClassLoader().getResourceAsStream("default.properties");
@@ -64,9 +64,15 @@ public class Config {
     return config;
   }
 
-  static void check(File file) {
-    if (file.exists() == false || file.isDirectory()) {
+  static void check(File file, boolean isFile) {
+    if (file.exists() == false) {
       throw new IllegalArgumentException("No such file: " + file);
+    }
+    if (file.isFile() != isFile) {
+      throw new IllegalArgumentException("File check failed: " + file);
+    }
+    if (file.isDirectory() == isFile) {
+      throw new IllegalArgumentException("Directory check failed: " + file);
     }
   }
 
@@ -80,7 +86,7 @@ public class Config {
     for (String arg : args) {
       for (String prefix : prefixes) {
         if (arg.startsWith(prefix)) {
-          return arg.substring(prefix.length());
+          return arg.substring(prefix.length() + 1); //+1=
         }
       }
     }

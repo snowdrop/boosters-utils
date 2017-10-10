@@ -10,9 +10,9 @@ public class Main {
     try {
       Config config = Config.parse(args);
       for (String repo : config.getRepos()) {
-        File repoFile = new File(config.getRoot() + repo);
-        Config.check(repoFile);
-        Tagger.tag(repoFile, config.getBranch());
+        File repoDir = new File(config.getRoot() + repo);
+        Config.check(repoDir, false);
+        Tagger.tag(repoDir, config.getBranch());
       }
     } catch (Exception e) {
       System.err.println(e);
