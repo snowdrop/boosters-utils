@@ -48,12 +48,12 @@ public abstract class AbstractTagger implements Tagger {
         List<Tag> tags = tagRefs.stream().map(Tag::new).collect(Collectors.toList());
         Collections.sort(tags);
 
-        String currentTag = (tags.isEmpty() ? null : tags.get(0).getName());
+        Tag currentTag = (tags.isEmpty() ? null : tags.get(0));
         log.info(String.format("Current tag [%s]: %s", repo, currentTag));
-        String nextTag = branch.nextTag(currentTag);
+        Tag nextTag = branch.nextTag(currentTag);
         log.info(String.format("Next tag [%s]: %s", repo, nextTag));
 
-        Ref tagged = git.tag().setName(nextTag).call();
+        Ref tagged = git.tag().setName(nextTag.toString()).call();
         git.push().setTransportConfigCallback(new CustomTransportConfigCallback()).add(tagged).call();
         log.info(String.format("Tagging [%s] done.", repo));
 

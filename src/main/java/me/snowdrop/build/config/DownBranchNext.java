@@ -5,7 +5,7 @@ package me.snowdrop.build.config;
  */
 public class DownBranchNext extends UpBranchNext {
   @Override
-  public String nextTag(String currentTag) {
-    return super.nextTag(currentTag) + "-redhat";
+  protected String suffix() {
+    return "-redhat";
   }
 }

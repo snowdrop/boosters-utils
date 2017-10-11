@@ -1,5 +1,7 @@
 package me.snowdrop.build.config;
 
+import me.snowdrop.build.tag.Tag;
+
 /**
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
@@ -17,9 +19,8 @@ public enum Branch implements BranchNext {
     return name().toLowerCase();
   }
 
-
   @Override
-  public String nextTag(String currentTag) {
+  public Tag nextTag(Tag currentTag) {
     return next.nextTag(currentTag);
   }
 }
