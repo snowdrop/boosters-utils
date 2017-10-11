@@ -13,6 +13,7 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 public class LocalTagger extends AbstractTagger {
   public LocalTagger(Config config, String repo) {
     super(config, repo);
+    Config.check("No repo root!", config.getRoot());
   }
 
   public void tag() throws Exception {

@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 
+import me.snowdrop.build.config.Branch;
 import me.snowdrop.build.config.Config;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
@@ -19,15 +20,24 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 public class RemoteTagger extends AbstractTagger {
   public RemoteTagger(Config config, String repo) {
     super(config, repo);
+    Config.check("No local path!", config.getLocalPath());
   }
 
   public void tag() throws Exception {
     File localPath = new File(config.getLocalPath());
     Config.check(localPath, false);
-    File localDir = new File(localPath, "tmp-tags");
-    deleteTempDir(localDir);
+    File tempDir = new File(localPath, "tmp-tags");
+    if (tempDir.exists()) {
+      deleteTempDir(tempDir);
+    }
+    if (tempDir.mkdir() == false) {
+      throw new IllegalStateException("Cannot create temp dir: " + tempDir);
+    }
 
-    CloneCommand cloneCommand = Git.cloneRepository().setURI(repo).setDirectory(localDir);
+    Branch branch = config.getBranch();
+    log.info(String.format("Remote checkout [%s] to %s", branch, tempDir));
+
+    CloneCommand cloneCommand = Git.cloneRepository().setURI(repo).setDirectory(tempDir).setBranch(branch.label());
     cloneCommand.setTransportConfigCallback(new CustomTransportConfigCallback());
     if (config.getUsername() != null && config.getPassword() != null) {
       cloneCommand.setCredentialsProvider(
@@ -38,7 +48,8 @@ public class RemoteTagger extends AbstractTagger {
     try {
       nextTag(git);
     } finally {
-      deleteTempDir(localDir);
+      deleteTempDir(tempDir);
+      log.info("Deleted temp dir: " + tempDir);
     }
   }
 
@@ -46,13 +57,13 @@ public class RemoteTagger extends AbstractTagger {
     Files.walkFileTree(dir.toPath(), new SimpleFileVisitor<Path>() {
       @Override
       public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-        Files.delete(file);
+        Files.deleteIfExists(file);
         return FileVisitResult.CONTINUE;
       }
 
       @Override
       public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-        Files.delete(dir);
+        Files.deleteIfExists(dir);
         return FileVisitResult.CONTINUE;
       }
     });

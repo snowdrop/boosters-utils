@@ -69,7 +69,6 @@ public class Config {
     }
 
     String root = properties.getProperty("repo.root");
-    check("No repo root!", root);
     config.root = root;
 
     int i = 1;
@@ -126,7 +125,7 @@ public class Config {
     }
   }
 
-  private static void check(String msg, Object value) {
+  public static void check(String msg, Object value) {
     if (value == null) {
       throw new IllegalArgumentException(msg);
     }
