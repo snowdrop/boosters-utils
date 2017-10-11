@@ -1,4 +1,4 @@
-package me.snowdrop.build;
+package me.snowdrop.build.config;
 
 /**
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>

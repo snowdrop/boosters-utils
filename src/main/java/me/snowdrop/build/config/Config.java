@@ -1,8 +1,8 @@
-package me.snowdrop.build;
+package me.snowdrop.build.config;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,6 +16,12 @@ public class Config {
   private List<String> repos = new ArrayList<>();
   private Branch branch;
 
+  private String username;
+  private String password;
+  private String passphrase;
+
+  private String localPath;
+
   public String getRoot() {
     return root;
   }
@@ -28,16 +34,30 @@ public class Config {
     return branch;
   }
 
+  public String getUsername() {
+    return username;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public String getPassphrase() {
+    return passphrase;
+  }
+
+  public String getLocalPath() {
+    return localPath;
+  }
+
   public static Config parse(String[] args) throws Exception {
     Config config = new Config();
     config.branch = Branch.valueOf(findArg(args, true, "-b", "-branch").toUpperCase());
 
     InputStream stream;
-    String reposFile = findArg(args, false, "-p", "-props");
-    if (reposFile != null) {
-      File file = new File(reposFile);
-      check(file, true);
-      stream = new FileInputStream(file);
+    String propsURL = findArg(args, false, "-c", "-config");
+    if (propsURL != null) {
+      stream = new URL(propsURL).openStream();
     } else {
       stream = Config.class.getClassLoader().getResourceAsStream("default.properties");
     }
@@ -61,10 +81,40 @@ public class Config {
       }
     }
 
+    String username = findArg(args, false, "-u", "-user");
+    if (username == null) {
+      username = properties.getProperty("username");
+    }
+    config.username = username;
+
+    String password = findArg(args, false, "-p", "-pass");
+    if (password == null) {
+      password = properties.getProperty("password");
+    }
+    config.password = password;
+
+    String passphrase = findArg(args, false, "-ph", "-phrase", "-passphrase");
+    if (passphrase == null) {
+      passphrase = properties.getProperty("passphrase");
+    }
+    if (passphrase == null) {
+      passphrase = password;
+    }
+    config.passphrase = passphrase;
+
+    String localPath = findArg(args, false, "-lp", "-path", "-localpath");
+    if (localPath == null) {
+      localPath = properties.getProperty("local.path");
+    }
+    if (localPath == null) {
+      localPath = root;
+    }
+    config.localPath = localPath;
+
     return config;
   }
 
-  static void check(File file, boolean isFile) {
+  public static void check(File file, boolean isFile) {
     if (file.exists() == false) {
       throw new IllegalArgumentException("No such file: " + file);
     }
@@ -94,5 +144,9 @@ public class Config {
       throw new IllegalArgumentException(String.format("No such prefix found: %s", Arrays.asList(prefixes)));
     }
     return null;
+  }
+
+  public String dump() {
+    return "Root: " + root + "\n" + "Branch: " + branch + "\n" + "Repos: " + repos + "\n";
   }
 }

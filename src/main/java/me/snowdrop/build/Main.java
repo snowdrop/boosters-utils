@@ -1,21 +1,28 @@
 package me.snowdrop.build;
 
-import java.io.File;
+import java.util.logging.Logger;
+
+import me.snowdrop.build.config.Config;
+import me.snowdrop.build.tag.Tagger;
+import me.snowdrop.build.tag.TaggerFactory;
 
 /**
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
 public class Main {
+  private static final Logger log = Logger.getLogger(Main.class.getName());
+
   public static void main(String[] args) {
     try {
       Config config = Config.parse(args);
+      log.info("Config: " + config.dump());
       for (String repo : config.getRepos()) {
-        File repoDir = new File(config.getRoot() + repo);
-        Config.check(repoDir, false);
-        Tagger.tag(repoDir, config.getBranch());
+        log.info(String.format("Tagging repo: %s", repo));
+        Tagger tagger = TaggerFactory.create(config, repo);
+        tagger.tag();
       }
     } catch (Exception e) {
-      System.err.println(e);
+      e.printStackTrace();
     }
   }
 }

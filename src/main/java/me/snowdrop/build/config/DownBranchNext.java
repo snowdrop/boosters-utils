@@ -1,4 +1,4 @@
-package me.snowdrop.build;
+package me.snowdrop.build.config;
 
 /**
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
@@ -6,6 +6,6 @@ package me.snowdrop.build;
 public class DownBranchNext extends UpBranchNext {
   @Override
   public String nextTag(String currentTag) {
-    return super.nextTag(currentTag) + "redhat";
+    return super.nextTag(currentTag) + "-redhat";
   }
 }

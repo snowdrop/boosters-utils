@@ -1,4 +1,4 @@
-package me.snowdrop.build;
+package me.snowdrop.build.config;
 
 /**
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
@@ -13,7 +13,7 @@ public enum Branch implements BranchNext {
     this.next = next;
   }
 
-  String label() {
+  public String label() {
     return name().toLowerCase();
   }
 
