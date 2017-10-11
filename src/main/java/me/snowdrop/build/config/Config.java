@@ -15,6 +15,7 @@ public class Config {
   private String root;
   private List<String> repos = new ArrayList<>();
   private Branch branch;
+  private String remote;
 
   private String username;
   private String password;
@@ -32,6 +33,10 @@ public class Config {
 
   public Branch getBranch() {
     return branch;
+  }
+
+  public String getRemote() {
+    return remote;
   }
 
   public String getUsername() {
@@ -67,6 +72,12 @@ public class Config {
     } finally {
       stream.close();
     }
+
+    String remote = findArg(args, false, "-r", "-remote");
+    if (remote == null) {
+      remote = properties.getProperty("remote", "origin");
+    }
+    config.remote = remote;
 
     String root = properties.getProperty("repo.root");
     config.root = root;

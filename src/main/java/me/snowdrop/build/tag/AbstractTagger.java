@@ -1,6 +1,5 @@
 package me.snowdrop.build.tag;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
@@ -12,7 +11,6 @@ import me.snowdrop.build.config.Branch;
 import me.snowdrop.build.config.Config;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.TransportConfigCallback;
-import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.transport.JschConfigSessionFactory;
 import org.eclipse.jgit.transport.OpenSshConfig;
@@ -33,13 +31,18 @@ public abstract class AbstractTagger implements Tagger {
     this.repo = repo;
   }
 
-  protected void nextTag(Git git) throws IOException, GitAPIException {
+  protected void updateBranch(Git git) throws Exception {
+  }
+
+  protected void nextTag(Git git) throws Exception {
     try {
       final String currentBranch = git.getRepository().getBranch();
       try {
         Branch branch = config.getBranch();
 
         git.checkout().setName(branch.label()).call();
+
+        updateBranch(git);
 
         List<Ref> tagRefs = git.tagList().call();
         List<Tag> tags = tagRefs.stream().map(Tag::new).collect(Collectors.toList());

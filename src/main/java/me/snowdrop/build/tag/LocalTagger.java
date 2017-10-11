@@ -25,4 +25,14 @@ public class LocalTagger extends AbstractTagger {
 
     nextTag(new Git(repository));
   }
+
+  @Override
+  protected void updateBranch(Git git) throws Exception {
+    git
+      .pull()
+      .setRebase(true)
+      .setRemoteBranchName(config.getBranch().label())
+      .setTransportConfigCallback(new CustomTransportConfigCallback())
+      .call();
+  }
 }
