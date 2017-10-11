@@ -1,7 +1,8 @@
 package me.snowdrop.build.tag;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -45,10 +46,9 @@ public abstract class AbstractTagger implements Tagger {
         updateBranch(git);
 
         List<Ref> tagRefs = git.tagList().call();
-        List<Tag> tags = tagRefs.stream().map(Tag::new).collect(Collectors.toList());
-        Collections.sort(tags);
+        Set<Tag> tags = tagRefs.stream().map(Tag::new).collect(Collectors.toCollection(TreeSet::new));
 
-        Tag currentTag = (tags.isEmpty() ? null : tags.get(0));
+        Tag currentTag = (tags.isEmpty() ? null : tags.iterator().next());
         log.info(String.format("Current tag [%s]: %s", repo, currentTag));
         Tag nextTag = branch.nextTag(currentTag);
         log.info(String.format("Next tag [%s]: %s", repo, nextTag));
