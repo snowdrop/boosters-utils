@@ -75,7 +75,7 @@ public class Config {
     String repo;
     while((repo = properties.getProperty("repo." + i)) != null) {
       i++;
-      if (properties.getProperty("exclude." + repo) == null) {
+      if (Boolean.parseBoolean(properties.getProperty("exclude." + repo)) == false) {
         config.repos.add(repo);
       }
     }

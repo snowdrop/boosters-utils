@@ -18,11 +18,15 @@ public class Tag implements Comparable<Tag> {
     String fullName = ref.getName();
     int p = fullName.lastIndexOf("/");
     this.name = fullName.substring(p + 1);
-    Matcher matcher = TAG.matcher(this.name);
+    this.number = parseVersion(name);
+  }
+
+  public static int parseVersion(String tag) {
+    Matcher matcher = TAG.matcher(tag);
     if (matcher.find()) {
-      number = Integer.parseInt(matcher.group(1));
+      return Integer.parseInt(matcher.group(1));
     } else {
-      throw new IllegalStateException("Cannot match tag: " + name);
+      throw new IllegalStateException("Cannot match tag: " + tag);
     }
   }
 
