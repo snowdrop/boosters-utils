@@ -93,21 +93,25 @@ public abstract class AbstractTagger implements Tagger {
 
         @Override
         public boolean promptPassword(String message) {
-          return false;
+          showMessage(message);
+          return (config.getPassword() != null);
         }
 
         @Override
         public boolean promptPassphrase(String message) {
-          return true;
+          showMessage(message);
+          return (config.getPassphrase() != null);
         }
 
         @Override
         public boolean promptYesNo(String message) {
+          showMessage(message);
           return false;
         }
 
         @Override
         public void showMessage(String message) {
+          log.info(">> " + message);
         }
       });
     }

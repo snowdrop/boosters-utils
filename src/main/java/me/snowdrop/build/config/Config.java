@@ -15,7 +15,6 @@ public class Config {
   private String root;
   private List<String> repos = new ArrayList<>();
   private Branch branch;
-  private String remote;
 
   private String username;
   private String password;
@@ -33,10 +32,6 @@ public class Config {
 
   public Branch getBranch() {
     return branch;
-  }
-
-  public String getRemote() {
-    return remote;
   }
 
   public String getUsername() {
@@ -57,10 +52,10 @@ public class Config {
 
   public static Config parse(String[] args) throws Exception {
     Config config = new Config();
-    config.branch = Branch.valueOf(findArg(args, true, "-b", "-branch").toUpperCase());
+    config.branch = Branch.valueOf(findArg(args, true, "b", "branch").toUpperCase());
 
     InputStream stream;
-    String propsURL = findArg(args, false, "-c", "-config");
+    String propsURL = findArg(args, false, "c", "config");
     if (propsURL != null) {
       stream = new URL(propsURL).openStream();
     } else {
@@ -73,13 +68,10 @@ public class Config {
       stream.close();
     }
 
-    String remote = findArg(args, false, "-r", "-remote");
-    if (remote == null) {
-      remote = properties.getProperty("remote", "origin");
+    String root = findArg(args, false, "root");
+    if (root == null) {
+      root = properties.getProperty("repo.root");
     }
-    config.remote = remote;
-
-    String root = properties.getProperty("repo.root");
     config.root = root;
 
     int i = 1;
@@ -91,19 +83,19 @@ public class Config {
       }
     }
 
-    String username = findArg(args, false, "-u", "-user");
+    String username = findArg(args, false, "u", "user");
     if (username == null) {
       username = properties.getProperty("username");
     }
     config.username = username;
 
-    String password = findArg(args, false, "-p", "-pass");
+    String password = findArg(args, false, "p", "pass");
     if (password == null) {
       password = properties.getProperty("password");
     }
     config.password = password;
 
-    String passphrase = findArg(args, false, "-ph", "-phrase", "-passphrase");
+    String passphrase = findArg(args, false, "ph", "phrase", "passphrase");
     if (passphrase == null) {
       passphrase = properties.getProperty("passphrase");
     }
@@ -112,7 +104,7 @@ public class Config {
     }
     config.passphrase = passphrase;
 
-    String localPath = findArg(args, false, "-lp", "-path", "-localpath");
+    String localPath = findArg(args, false, "lp", "path", "localpath");
     if (localPath == null) {
       localPath = properties.getProperty("local.path");
     }
@@ -145,8 +137,8 @@ public class Config {
   private static String findArg(String[] args, boolean required, String... prefixes) {
     for (String arg : args) {
       for (String prefix : prefixes) {
-        if (arg.startsWith(prefix)) {
-          return arg.substring(prefix.length() + 1); //+1=
+        if (arg.startsWith("-" + prefix)) {
+          return arg.substring(prefix.length() + 2); // - and =
         }
       }
     }
