@@ -40,15 +40,15 @@ public class Tag implements Comparable<Tag> {
     return new Tag(prefix, 1, suffix);
   }
 
-  public Tag previous() {
+  public Tag previous(String p, String s) {
     if (number - 1 <= 0) {
       throw new IllegalStateException("Already first version: " + toString());
     }
-    return new Tag(prefix, number - 1, suffix);
+    return new Tag(p, number - 1, s);
   }
 
-  public Tag next() {
-    return new Tag(prefix, number + 1, suffix);
+  public Tag next(String p, String s) {
+    return new Tag(p, number + 1, s);
   }
 
   @Override

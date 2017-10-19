@@ -11,7 +11,7 @@ public class UpBranchNext implements BranchNext {
     if (currentTag == null) {
       return Tag.first(prefix(), suffix());
     }
-    return currentTag.next();
+    return currentTag.next(prefix(), suffix());
   }
 
   protected String prefix() {

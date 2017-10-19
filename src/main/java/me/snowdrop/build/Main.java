@@ -3,6 +3,7 @@ package me.snowdrop.build;
 import java.util.logging.Logger;
 
 import me.snowdrop.build.config.Config;
+import me.snowdrop.build.config.RepoUtils;
 import me.snowdrop.build.tag.Tagger;
 import me.snowdrop.build.tag.TaggerFactory;
 
@@ -16,7 +17,7 @@ public class Main {
     try {
       Config config = Config.parse(args);
       log.info("Config: " + config.dump());
-      for (String repo : config.getRepos()) {
+      for (String repo : RepoUtils.getRepos(config)) {
         log.info(String.format("Tagging repo: %s", repo));
         Tagger tagger = TaggerFactory.create(config, repo);
         tagger.tag();

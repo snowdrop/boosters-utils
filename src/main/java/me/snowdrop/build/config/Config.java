@@ -3,18 +3,24 @@ package me.snowdrop.build.config;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Properties;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
 public class Config {
+  private static final String REPOS = "https://api.github.com/orgs/%s/repos?per_page=100";
+
   private String root;
-  private List<String> repos = new ArrayList<>();
+  private Set<String> repos = new TreeSet<>();
   private Branch branch;
+
+  private String queryUrl;
+  private String organization;
+  private String repoRegExp;
 
   private String username;
   private String password;
@@ -26,12 +32,24 @@ public class Config {
     return root;
   }
 
-  public List<String> getRepos() {
+  public Set<String> getRepos() {
     return repos;
   }
 
   public Branch getBranch() {
     return branch;
+  }
+
+  public String getQueryUrl() {
+    return queryUrl;
+  }
+
+  public String getOrganization() {
+    return organization;
+  }
+
+  public String getRepoRegExp() {
+    return repoRegExp;
   }
 
   public String getUsername() {
@@ -68,11 +86,7 @@ public class Config {
       stream.close();
     }
 
-    String root = findArg(args, false, "root");
-    if (root == null) {
-      root = properties.getProperty("repo.root");
-    }
-    config.root = root;
+    config.root = findValue(args, properties, "repo.root", "root");
 
     int i = 1;
     String repo;
@@ -83,35 +97,17 @@ public class Config {
       }
     }
 
-    String username = findArg(args, false, "u", "user");
-    if (username == null) {
-      username = properties.getProperty("username");
+    config.queryUrl = findValue(args, properties, "queryUrl", "q", "query");
+    if (config.queryUrl == null) {
+      config.queryUrl = REPOS;
     }
-    config.username = username;
+    config.organization = findValue(args, properties, "organization", "o", "org", "organization");
+    config.repoRegExp = findValue(args, properties, "repo.regexp", "r", "regexp", "repo.regexp");
 
-    String password = findArg(args, false, "p", "pass");
-    if (password == null) {
-      password = properties.getProperty("password");
-    }
-    config.password = password;
-
-    String passphrase = findArg(args, false, "ph", "phrase", "passphrase");
-    if (passphrase == null) {
-      passphrase = properties.getProperty("passphrase");
-    }
-    if (passphrase == null) {
-      passphrase = password;
-    }
-    config.passphrase = passphrase;
-
-    String localPath = findArg(args, false, "lp", "path", "localpath");
-    if (localPath == null) {
-      localPath = properties.getProperty("local.path");
-    }
-    if (localPath == null) {
-      localPath = root;
-    }
-    config.localPath = localPath;
+    config.username = findValue(args, properties, "username", "u", "user");
+    config.password = findValue(args, properties, "password", "p", "pass");
+    config.passphrase = findValue(args, properties, "passphrase", "ph", "phrase", "passphrase");
+    config.localPath = findValue(args, properties, "local.path", "lp", "path", "localpath");
 
     return config;
   }
@@ -132,6 +128,14 @@ public class Config {
     if (value == null) {
       throw new IllegalArgumentException(msg);
     }
+  }
+
+  private static String findValue(String[] args, Properties properties, String key, String... prefixes) {
+    String value = findArg(args, false, prefixes);
+    if (value == null) {
+      value = properties.getProperty(key, null);
+    }
+    return value;
   }
 
   private static String findArg(String[] args, boolean required, String... prefixes) {

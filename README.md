@@ -8,6 +8,9 @@ Available options:
 * -ph, -phrase, -passphrase = ssh passphrase **
 * -root = url to git root owning booster repos ***
 * -lp, -path, -localpath = local path to boosters ***
+* -q, -query = GitHub query url to grab repos, by default organization repos list query is used
+* -o, -org, -organization = repo organization
+* -r, -regexp, -repo.regexp = regexp for matching repo org repos
 
 
     * -- argument is required
@@ -24,3 +27,7 @@ Where test.properties looks like
 
     local.path=/Users/alesj/projects/obsidian/snowdrop/
     repo.1=git@github.com:alesj/btagtest.git
+
+After "mvn clean install" you get a runnable uber-jar:
+
+    java -jar target/boosters-tag-1.0.0-SNAPSHOT.jar -b=upstream -c=file:/Users/alesj/projects/obsidian/snowdrop/boosters-tag/test.properties -ph=mypazzfrajz
