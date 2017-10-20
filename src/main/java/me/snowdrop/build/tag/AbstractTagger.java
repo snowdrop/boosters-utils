@@ -3,7 +3,6 @@ package me.snowdrop.build.tag;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import com.jcraft.jsch.Session;
@@ -17,12 +16,14 @@ import org.eclipse.jgit.transport.JschConfigSessionFactory;
 import org.eclipse.jgit.transport.OpenSshConfig;
 import org.eclipse.jgit.transport.SshTransport;
 import org.eclipse.jgit.transport.Transport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
 public abstract class AbstractTagger implements Tagger {
-  protected final Logger log = Logger.getLogger(getClass().getName());
+  protected final Logger log = LoggerFactory.getLogger(getClass().getName());
 
   protected final Config config;
   protected final String repo;
@@ -80,6 +81,8 @@ public abstract class AbstractTagger implements Tagger {
   protected class CustomSshSessionFactory extends JschConfigSessionFactory {
     @Override
     protected void configure(OpenSshConfig.Host host, Session session) {
+      //session.setConfig("StrictHostKeyChecking", "no"); // TODO?
+
       session.setUserInfo(new UserInfo() {
         @Override
         public String getPassphrase() {

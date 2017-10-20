@@ -1,17 +1,17 @@
 package me.snowdrop.build;
 
-import java.util.logging.Logger;
-
 import me.snowdrop.build.config.Config;
 import me.snowdrop.build.config.RepoUtils;
 import me.snowdrop.build.tag.Tagger;
 import me.snowdrop.build.tag.TaggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
 public class Main {
-  private static final Logger log = Logger.getLogger(Main.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(Main.class.getName());
 
   public static void run(String... args) {
     main(args);
