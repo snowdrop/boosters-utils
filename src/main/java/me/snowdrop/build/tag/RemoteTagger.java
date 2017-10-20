@@ -12,7 +12,6 @@ import me.snowdrop.build.config.Branch;
 import me.snowdrop.build.config.Config;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 /**
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
@@ -39,11 +38,7 @@ public class RemoteTagger extends AbstractTagger {
 
     CloneCommand cloneCommand = Git.cloneRepository().setURI(repo).setDirectory(tempDir).setBranch(branch.label());
     cloneCommand.setTransportConfigCallback(new CustomTransportConfigCallback());
-    if (config.getUsername() != null && config.getPassword() != null) {
-      cloneCommand.setCredentialsProvider(
-        new UsernamePasswordCredentialsProvider(config.getUsername(), config.getPassword())
-      );
-    }
+    applyUsernamePassword(cloneCommand);
     Git git = cloneCommand.call();
     try {
       nextTag(git);

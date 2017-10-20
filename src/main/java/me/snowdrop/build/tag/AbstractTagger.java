@@ -10,12 +10,15 @@ import com.jcraft.jsch.UserInfo;
 import me.snowdrop.build.config.Branch;
 import me.snowdrop.build.config.Config;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.PushCommand;
+import org.eclipse.jgit.api.TransportCommand;
 import org.eclipse.jgit.api.TransportConfigCallback;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.transport.JschConfigSessionFactory;
 import org.eclipse.jgit.transport.OpenSshConfig;
 import org.eclipse.jgit.transport.SshTransport;
 import org.eclipse.jgit.transport.Transport;
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +58,9 @@ public abstract class AbstractTagger implements Tagger {
         log.info(String.format("Next tag [%s]: %s", repo, nextTag));
 
         Ref tagged = git.tag().setName(nextTag.toString()).call();
-        git.push().setTransportConfigCallback(new CustomTransportConfigCallback()).add(tagged).call();
+        PushCommand pushCommand = git.push();
+        applyUsernamePassword(pushCommand);
+        pushCommand.setTransportConfigCallback(new CustomTransportConfigCallback()).add(tagged).call();
         log.info(String.format("Tagging [%s] done.", repo));
 
       } catch (Exception e) {
@@ -65,6 +70,14 @@ public abstract class AbstractTagger implements Tagger {
       }
     } finally {
       git.close();
+    }
+  }
+
+  protected void applyUsernamePassword(TransportCommand command) {
+    if (config.getUsername() != null && config.getPassword() != null) {
+      command.setCredentialsProvider(
+        new UsernamePasswordCredentialsProvider(config.getUsername(), config.getPassword())
+      );
     }
   }
 
