@@ -18,16 +18,20 @@ public class Main {
   }
 
   public static void main(String[] args) {
+    int failures = 0;
     try {
       Config config = Config.parse(args);
       log.info("Config: " + config.dump());
       for (String repo : RepoUtils.getRepos(config)) {
         log.info(String.format("Tagging repo: %s", repo));
         Tagger tagger = TaggerFactory.create(config, repo);
-        tagger.tag();
+        if (!tagger.tag()) {
+          failures++;
+        }
       }
     } catch (Exception e) {
       e.printStackTrace();
     }
+    System.exit(failures);
   }
 }

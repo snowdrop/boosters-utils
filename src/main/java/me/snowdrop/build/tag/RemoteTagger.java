@@ -22,7 +22,7 @@ public class RemoteTagger extends AbstractTagger {
     Config.check("No local path!", config.getLocalPath());
   }
 
-  public void tag() throws Exception {
+  public boolean tag() throws Exception {
     File localPath = new File(config.getLocalPath());
     Config.check(localPath, false);
     File tempDir = new File(localPath, "tmp-tags");
@@ -41,7 +41,7 @@ public class RemoteTagger extends AbstractTagger {
     applyUsernamePassword(cloneCommand);
     Git git = cloneCommand.call();
     try {
-      nextTag(git);
+      return nextTag(git);
     } finally {
       deleteTempDir(tempDir);
       log.info("Deleted temp dir: " + tempDir);

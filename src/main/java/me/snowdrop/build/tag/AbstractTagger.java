@@ -39,7 +39,7 @@ public abstract class AbstractTagger implements Tagger {
   protected void updateBranch(Git git) throws Exception {
   }
 
-  protected void nextTag(Git git) throws Exception {
+  protected boolean nextTag(Git git) throws Exception {
     try {
       final String currentBranch = git.getRepository().getBranch();
       try {
@@ -63,8 +63,10 @@ public abstract class AbstractTagger implements Tagger {
         pushCommand.setTransportConfigCallback(new CustomTransportConfigCallback()).add(tagged).call();
         log.info(String.format("Tagging [%s] done.", repo));
 
+        return true;
       } catch (Exception e) {
         e.printStackTrace();
+        return false;
       } finally {
         git.checkout().setName(currentBranch).call();
       }

@@ -16,14 +16,14 @@ public class LocalTagger extends AbstractTagger {
     Config.check("No repo root!", config.getRoot());
   }
 
-  public void tag() throws Exception {
+  public boolean tag() throws Exception {
     FileRepositoryBuilder builder = new FileRepositoryBuilder();
     Repository repository = builder.setGitDir(new File(config.getRoot() + repo, ".git"))
       .readEnvironment() // scan environment GIT_* variables
       .findGitDir() // scan up the file system tree
       .build();
 
-    nextTag(new Git(repository));
+    return nextTag(new Git(repository));
   }
 
   @Override
