@@ -25,6 +25,7 @@ public class Config {
   private String username;
   private String password;
   private String passphrase;
+  private String token;
 
   private String localPath;
 
@@ -62,6 +63,10 @@ public class Config {
 
   public String getPassphrase() {
     return passphrase;
+  }
+
+  public String getToken() {
+    return token;
   }
 
   public String getLocalPath() {
@@ -107,6 +112,8 @@ public class Config {
     config.username = findValue(args, properties, "username", "u", "user");
     config.password = findValue(args, properties, "password", "p", "pass");
     config.passphrase = findValue(args, properties, "passphrase", "ph", "phrase", "passphrase");
+    config.token = findValue(args, properties, "token", "t", "token");
+
     config.localPath = findValue(args, properties, "local.path", "lp", "path", "localpath");
 
     return config;

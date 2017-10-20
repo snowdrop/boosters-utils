@@ -37,7 +37,7 @@ public class RepoUtils {
           GitHubProject[] projects = gson.fromJson(content, GitHubProject[].class);
           for (GitHubProject project : projects) {
             if (pattern.matcher(project.name).find()) {
-              repos.add(useSSH ? project.ssh_url : project.git_url);
+              repos.add(useSSH ? project.ssh_url : project.clone_url);
             }
           }
         }
@@ -51,11 +51,11 @@ public class RepoUtils {
   private static class GitHubProject {
     private String name;
     private String ssh_url;
-    private String git_url;
+    private String clone_url;
 
     @Override
     public String toString() {
-      return String.format("%s [%s] [%s]", name, ssh_url, git_url);
+      return String.format("%s [%s] [%s]", name, ssh_url, clone_url);
     }
   }
 }

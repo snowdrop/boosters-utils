@@ -74,7 +74,11 @@ public abstract class AbstractTagger implements Tagger {
   }
 
   protected void applyUsernamePassword(TransportCommand command) {
-    if (config.getUsername() != null && config.getPassword() != null) {
+    if (config.getToken() != null) {
+      command.setCredentialsProvider(
+        new UsernamePasswordCredentialsProvider(config.getToken(), "")
+      );
+    } else if (config.getUsername() != null && config.getPassword() != null) {
       command.setCredentialsProvider(
         new UsernamePasswordCredentialsProvider(config.getUsername(), config.getPassword())
       );

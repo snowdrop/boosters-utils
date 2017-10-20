@@ -11,7 +11,7 @@ pipeline {
    parameters {
       string(name: 'btagversion', defaultValue: '1.0.0-SNAPSHOT', description: 'Which boosters-tag version?')
       string(name: 'branch', defaultValue: 'upstream', description: 'Which branch to use?')
-      string(name: 'passphrase', defaultValue: 'pzzfrz', description: 'SSH passphrase?')
+      string(name: 'token', description: 'OAuth token?')
    }
 
    stages {
@@ -29,7 +29,7 @@ pipeline {
        }
        stage('Deploy') {
           steps {
-              sh "java -jar ${WORKSPACE}/target/boosters-tag-${params.btagversion}.jar -b=${params.branch} -lp=${WORKSPACE} -q=https://api.github.com/users/%s/repos -o=alesj -ph=${params.passphrase} -r=btagtest\$5"
+              sh "java -jar ${WORKSPACE}/target/boosters-tag-${params.btagversion}.jar -b=${params.branch} -lp=${WORKSPACE} -q=https://api.github.com/users/%s/repos -o=alesj -t=${params.token} -r=btagtest\$5"
           }
        }
    }
