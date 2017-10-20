@@ -13,6 +13,10 @@ import me.snowdrop.build.tag.TaggerFactory;
 public class Main {
   private static final Logger log = Logger.getLogger(Main.class.getName());
 
+  public static void run(String... args) {
+    main(args);
+  }
+
   public static void main(String[] args) {
     try {
       Config config = Config.parse(args);

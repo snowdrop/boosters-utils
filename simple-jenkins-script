@@ -1,0 +1,23 @@
+node {
+   def mvnHome
+
+   stage('Preparation') { // for display purposes
+      // Get some code from a GitHub repository
+      git 'https://github.com/alesj/boosters-tag'
+      // Get the Maven tool.
+      // ** NOTE: This 'M3' Maven tool must be configured
+      // **       in the global configuration.
+      mvnHome = tool 'M3'
+   }
+   stage('Build') {
+      // Run the maven build
+      if (isUnix()) {
+         sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean package"
+      } else {
+         bat(/"${mvnHome}\bin\mvn" -Dmaven.test.failure.ignore clean package/)
+      }
+   }
+   stage('Deploy') {
+      sh "java -jar ${mvnHome}/me/snowdrop/build/boosters-tag/1.0.0-SNAPSHOT/boosters-tag-1.0.0-SNAPSHOT.jar -b=upstream -o=snowdrop -ph=xyz"
+   }
+}
