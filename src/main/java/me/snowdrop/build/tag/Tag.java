@@ -36,6 +36,10 @@ public class Tag implements Comparable<Tag> {
     }
   }
 
+  public boolean match(String prefix, String suffix) {
+    return this.prefix.equals(prefix) && this.suffix.equals(suffix);
+  }
+
   public static Tag first(String prefix, String suffix) {
     return new Tag(prefix, 1, suffix);
   }

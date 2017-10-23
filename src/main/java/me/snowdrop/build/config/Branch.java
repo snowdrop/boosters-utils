@@ -20,7 +20,7 @@ public enum Branch implements BranchNext {
   }
 
   @Override
-  public Tag nextTag(Tag currentTag) {
-    return next.nextTag(currentTag);
+  public Tag nextTag(Iterable<Tag> currentTags) {
+    return next.nextTag(currentTags);
   }
 }

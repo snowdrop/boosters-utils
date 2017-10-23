@@ -7,11 +7,21 @@ import me.snowdrop.build.tag.Tag;
  */
 public class UpBranchNext implements BranchNext {
   @Override
-  public Tag nextTag(Tag currentTag) {
+  public Tag nextTag(Iterable<Tag> tags) {
+    Tag currentTag = null;
+
+    for (Tag tag : tags) {
+      if (tag.match(prefix(), suffix())) {
+        currentTag = tag;
+        break;
+      }
+    }
+
     if (currentTag == null) {
       return Tag.first(prefix(), suffix());
+    } else {
+      return currentTag.next(prefix(), suffix());
     }
-    return currentTag.next(prefix(), suffix());
   }
 
   protected String prefix() {

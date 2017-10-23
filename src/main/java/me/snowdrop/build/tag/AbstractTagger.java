@@ -1,8 +1,8 @@
 package me.snowdrop.build.tag;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import com.jcraft.jsch.Session;
@@ -50,17 +50,16 @@ public abstract class AbstractTagger implements Tagger {
         updateBranch(git);
 
         List<Ref> tagRefs = git.tagList().call();
-        Set<Tag> tags = tagRefs.stream().map(Tag::new).collect(Collectors.toCollection(TreeSet::new));
+        List<Tag> tags = tagRefs.stream().map(Tag::new).collect(Collectors.toCollection(ArrayList::new));
+        Collections.sort(tags);
 
-        Tag currentTag = (tags.isEmpty() ? null : tags.iterator().next());
-        log.info(String.format("Current tag [%s]: %s", repo, currentTag));
-        Tag nextTag = branch.nextTag(currentTag);
+        Tag nextTag = branch.nextTag(tags);
         log.info(String.format("Next tag [%s]: %s", repo, nextTag));
 
         Ref tagged = git.tag().setName(nextTag.toString()).call();
         PushCommand pushCommand = git.push();
-        applyUsernamePassword(pushCommand);
-        pushCommand.setTransportConfigCallback(new CustomTransportConfigCallback()).add(tagged).call();
+        handleSecurity(pushCommand);
+        pushCommand.add(tagged).call();
         log.info(String.format("Tagging [%s] done.", repo));
 
         return true;
@@ -75,7 +74,9 @@ public abstract class AbstractTagger implements Tagger {
     }
   }
 
-  protected void applyUsernamePassword(TransportCommand command) {
+  protected void handleSecurity(TransportCommand command) {
+    command.setTransportConfigCallback(new CustomTransportConfigCallback());
+
     if (config.getToken() != null) {
       command.setCredentialsProvider(
         new UsernamePasswordCredentialsProvider(config.getToken(), "")
@@ -100,8 +101,6 @@ public abstract class AbstractTagger implements Tagger {
   protected class CustomSshSessionFactory extends JschConfigSessionFactory {
     @Override
     protected void configure(OpenSshConfig.Host host, Session session) {
-      //session.setConfig("StrictHostKeyChecking", "no"); // TODO?
-
       session.setUserInfo(new UserInfo() {
         @Override
         public String getPassphrase() {

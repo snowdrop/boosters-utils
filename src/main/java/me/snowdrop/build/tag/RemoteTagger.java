@@ -37,8 +37,7 @@ public class RemoteTagger extends AbstractTagger {
     log.info(String.format("Remote checkout [%s] to %s", branch, tempDir));
 
     CloneCommand cloneCommand = Git.cloneRepository().setURI(repo).setDirectory(tempDir).setBranch(branch.label());
-    cloneCommand.setTransportConfigCallback(new CustomTransportConfigCallback());
-    applyUsernamePassword(cloneCommand);
+    handleSecurity(cloneCommand);
     Git git = cloneCommand.call();
     try {
       return nextTag(git);
