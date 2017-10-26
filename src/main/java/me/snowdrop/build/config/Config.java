@@ -73,7 +73,7 @@ public class Config {
     return localPath;
   }
 
-  public static Config parse(String[] args) throws Exception {
+  public static Config parse(String... args) throws Exception {
     Config config = new Config();
     config.branch = Branch.valueOf(findArg(args, true, "b", "branch").toUpperCase());
 
@@ -160,6 +160,10 @@ public class Config {
   }
 
   public String dump() {
-    return "Root: " + root + "\n" + "Branch: " + branch + "\n" + "Repos: " + repos + "\n";
+    if (organization != null && repoRegExp != null) {
+      return "Org: " + organization + "\n" + "RegExp: " + repoRegExp + "\n";
+    } else {
+      return "Root: " + root + "\n" + "Branch: " + branch + "\n" + "Repos: " + repos + "\n";
+    }
   }
 }

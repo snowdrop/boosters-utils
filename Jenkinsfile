@@ -29,7 +29,7 @@ pipeline {
        }
        stage('Deploy') {
           steps {
-              sh "java -jar ${WORKSPACE}/target/boosters-tag-${params.btagversion}.jar -b=${params.branch} -lp=${WORKSPACE} -q=https://api.github.com/users/%s/repos -o=alesj -t=${params.token} -r=btagtest\$5"
+              sh "java -jar ${WORKSPACE}/target/boosters-tag-${params.btagversion}.jar -b=${params.branch} -lp=${WORKSPACE} -o=snowdrop -t=${params.token} -r=-booster\$5"
           }
        }
    }
