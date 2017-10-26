@@ -1,0 +1,13 @@
+node {
+   stage('Preparation') {
+    // Get some code from a GitHub repository
+    git "https://github.com/alesj/boosters-tag"
+   }
+   stage('Build') {
+    // Run the maven build
+    sh "mvn clean package"
+   }
+   stage('Deploy') {
+    sh "java -jar ${WORKSPACE}/target/boosters-tag-1.0.0-SNAPSHOT.jar -b=upstream -lp=${WORKSPACE} -o=alesj -t=${params.token} -r=btagtest\$5 -q=https://api.github.com/users/%s/repos"
+   }
+}
