@@ -1,6 +1,8 @@
 package me.snowdrop.build.config;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Arrays;
@@ -26,6 +28,7 @@ public class Config {
   private String password;
   private String passphrase;
   private String token;
+  private String tokenFile;
 
   private String localPath;
 
@@ -113,6 +116,15 @@ public class Config {
     config.password = findValue(args, properties, "password", "p", "pass");
     config.passphrase = findValue(args, properties, "passphrase", "ph", "phrase", "passphrase");
     config.token = findValue(args, properties, "token", "t", "token");
+    config.tokenFile = findValue(args, properties, "tokenfile", "tf", "tokenfile");
+
+    if (config.token == null && config.tokenFile != null) {
+      File tokenFile = new File(config.tokenFile);
+      check(tokenFile, true);
+      try (BufferedReader reader = new BufferedReader(new FileReader(tokenFile))) {
+        config.token = reader.readLine();
+      }
+    }
 
     config.localPath = findValue(args, properties, "local.path", "lp", "path", "localpath");
 

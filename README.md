@@ -7,6 +7,7 @@ Available options:
 * -p, -pass = git password **
 * -ph, -phrase, -passphrase = ssh passphrase **
 * -t, -token = oauth token **
+* -tf, -tokenfile = file with oauth token **
 * -root = url to git root owning booster repos ***
 * -lp, -path, -localpath = local path to boosters ***
 * -q, -query = GitHub query url to grab repos, by default organization repos list query is used
