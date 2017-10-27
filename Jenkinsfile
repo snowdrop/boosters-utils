@@ -1,4 +1,13 @@
 node {
+    // Parameters:
+    // token (required) -- generate GitHub repo push token
+    // gitrepo: https://github.com/alesj/boosters-tag
+    // btagversion: 1.0.0-SNAPSHOT
+    // branch: upstram
+    // org: snowdrop
+    // regexp: -booster$
+    // query: https://api.github.com/orgs/%s/repos?per_page=100
+
     def mvnHome
     stage('Preparation') {
         // Get some code from a GitHub repository

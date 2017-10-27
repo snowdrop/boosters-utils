@@ -161,9 +161,9 @@ public class Config {
 
   public String dump() {
     if (organization != null && repoRegExp != null) {
-      return "Org: " + organization + "\n" + "RegExp: " + repoRegExp + "\n";
+      return "\nOrg: " + organization + "\nRegExp: " + repoRegExp + "\n";
     } else {
-      return "Root: " + root + "\n" + "Branch: " + branch + "\n" + "Repos: " + repos + "\n";
+      return "\nRoot: " + root + "\nBranch: " + branch + "\nRepos: " + repos + "\n";
     }
   }
 }
