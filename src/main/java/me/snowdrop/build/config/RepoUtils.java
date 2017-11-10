@@ -1,5 +1,6 @@
 package me.snowdrop.build.config;
 
+import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
@@ -18,7 +19,9 @@ import org.apache.http.util.EntityUtils;
 public class RepoUtils {
 
   public static Set<String> getRepos(Config config) throws Exception {
-    if (config.getOrganization() != null && config.getRepoRegExp() != null) {
+      if (config.getRepo() != null) {
+          return Collections.singleton(config.getRepo());
+      } else if (config.getOrganization() != null && config.getRepoRegExp() != null) {
       Pattern pattern = Pattern.compile(config.getRepoRegExp());
       Set<String> repos = new TreeSet<>();
       String url = String.format(config.getQueryUrl(), config.getOrganization());

@@ -1,12 +1,16 @@
 node {
-    // Parameters:
-    // token (required) -- generate GitHub repo push token
-    // gitrepo: https://github.com/alesj/boosters-tag
-    // btagversion: 1.0.0-SNAPSHOT
-    // branch: upstram
-    // org: snowdrop
-    // regexp: -booster$
-    // query: https://api.github.com/orgs/%s/repos?per_page=100
+        // Parameters:
+        // token (required) -- generate GitHub repo push token
+        // gitrepo: https://github.com/alesj/boosters-tag
+        // btagversion: 1.0.0-SNAPSHOT
+        // branch: upstream
+        //
+        // And either:
+        // org: snowdrop
+        // regexp: -booster$
+        // query: https://api.github.com/orgs/%s/repos?per_page=100
+        // or
+        // repo: git@github.com:snowdrop/spring-boot-http-booster.git
 
     def mvnHome
     stage('Preparation') {

@@ -12,7 +12,8 @@ Available options:
 * -lp, -path, -localpath = local path to boosters ***
 * -q, -query = GitHub query url to grab repos, by default organization repos list query is used
 * -o, -org, -organization = repo organization
-* -r, -regexp, -repo.regexp = regexp for matching repo org repos
+* -re, -regexp, -repo.regexp = regexp for matching repo org repos
+* -r, -repo = explicit repo
 
 
     * -- argument is required

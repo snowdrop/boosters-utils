@@ -24,6 +24,8 @@ public class Config {
   private String organization;
   private String repoRegExp;
 
+    private String repo;
+
   private String username;
   private String password;
   private String passphrase;
@@ -56,7 +58,11 @@ public class Config {
     return repoRegExp;
   }
 
-  public String getUsername() {
+    public String getRepo() {
+        return repo;
+    }
+
+    public String getUsername() {
     return username;
   }
 
@@ -110,7 +116,9 @@ public class Config {
       config.queryUrl = REPOS;
     }
     config.organization = findValue(args, properties, "organization", "o", "org", "organization");
-    config.repoRegExp = findValue(args, properties, "repo.regexp", "r", "regexp", "repo.regexp");
+      config.repoRegExp = findValue(args, properties, "repo.regexp", "re", "regexp", "repo.regexp");
+
+      config.repo = findValue(args, properties, "repo", "r", "repo");
 
     config.username = findValue(args, properties, "username", "u", "user");
     config.password = findValue(args, properties, "password", "p", "pass");
@@ -160,7 +168,7 @@ public class Config {
   private static String findArg(String[] args, boolean required, String... prefixes) {
     for (String arg : args) {
       for (String prefix : prefixes) {
-        if (arg.startsWith("-" + prefix)) {
+          if (arg.startsWith("-" + prefix + "=")) {
           return arg.substring(prefix.length() + 2); // - and =
         }
       }
