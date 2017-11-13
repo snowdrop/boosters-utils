@@ -84,7 +84,7 @@ public class Config {
 
   public static Config parse(String... args) throws Exception {
     Config config = new Config();
-    config.branch = Branch.valueOf(findArg(args, true, "b", "branch").toUpperCase());
+    config.branch = BranchFactory.fromString(findArg(args, true, "b", "branch").toUpperCase());
 
     InputStream stream;
     String propsURL = findArg(args, false, "c", "config");
@@ -181,7 +181,9 @@ public class Config {
 
   public String dump() {
     if (organization != null && repoRegExp != null) {
-      return "\nOrg: " + organization + "\nRegExp: " + repoRegExp + "\n";
+        return "\nOrg: " + organization + "\nRegExp: " + repoRegExp + "\n";
+    } else if (repo != null) {
+      return "\nRepo: " + repo + "\n";
     } else {
       return "\nRoot: " + root + "\nBranch: " + branch + "\nRepos: " + repos + "\n";
     }

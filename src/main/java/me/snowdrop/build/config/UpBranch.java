@@ -5,8 +5,19 @@ import me.snowdrop.build.tag.Tag;
 /**
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public class UpBranchNext implements BranchNext {
-  @Override
+public class UpBranch implements Branch {
+    private String label;
+
+    public UpBranch(String label) {
+        this.label = label;
+    }
+
+    @Override
+    public String label() {
+        return label;
+    }
+
+    @Override
   public Tag nextTag(Iterable<Tag> tags) {
     Tag currentTag = null;
 

@@ -5,22 +5,19 @@ import me.snowdrop.build.tag.Tag;
 /**
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public enum Branch implements BranchNext {
-  UPSTREAM(new UpBranchNext()),
-  DOWNSTREAM(new DownBranchNext());
+public interface Branch {
+    /**
+     * Get branch' label / name.
+     *
+     * @return the label
+     */
+    String label();
 
-  private final BranchNext next;
-
-  Branch(BranchNext next) {
-    this.next = next;
-  }
-
-  public String label() {
-    return name().toLowerCase();
-  }
-
-  @Override
-  public Tag nextTag(Iterable<Tag> currentTags) {
-    return next.nextTag(currentTags);
-  }
+    /**
+     * Next tag.
+     *
+     * @param currentTags sorted (by version) current tags
+     * @return next tag
+     */
+    Tag nextTag(Iterable<Tag> currentTags);
 }
