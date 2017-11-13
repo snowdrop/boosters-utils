@@ -18,28 +18,28 @@ public class UpBranch implements Branch {
     }
 
     @Override
-  public Tag nextTag(Iterable<Tag> tags) {
-    Tag currentTag = null;
+    public Tag nextTag(Iterable<Tag> tags) {
+        Tag currentTag = null;
 
-    for (Tag tag : tags) {
-      if (tag.match(prefix(), suffix())) {
-        currentTag = tag;
-        break;
-      }
+        for (Tag tag : tags) {
+            if (tag.match(prefix(), suffix())) {
+                currentTag = tag;
+                break;
+            }
+        }
+
+        if (currentTag == null) {
+            return Tag.first(prefix(), suffix());
+        } else {
+            return currentTag.next(prefix(), suffix());
+        }
     }
 
-    if (currentTag == null) {
-      return Tag.first(prefix(), suffix());
-    } else {
-      return currentTag.next(prefix(), suffix());
+    protected String prefix() {
+        return "v";
     }
-  }
 
-  protected String prefix() {
-    return "v";
-  }
-
-  protected String suffix() {
-    return "";
-  }
+    protected String suffix() {
+        return "";
+    }
 }

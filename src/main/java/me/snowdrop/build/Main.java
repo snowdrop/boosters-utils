@@ -11,30 +11,30 @@ import org.slf4j.LoggerFactory;
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
 public class Main {
-  private static final Logger log = LoggerFactory.getLogger(Main.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(Main.class.getName());
 
-  public static void run(String... args) {
-    main(args);
-  }
-
-  public static void main(String[] args) {
-    int failures = 0;
-    try {
-      Config config = Config.parse(args);
-      log.info("Config: " + config.dump());
-      for (String repo : RepoUtils.getRepos(config)) {
-        log.info(String.format("Tagging repo: %s", repo));
-        Tagger tagger = TaggerFactory.create(config, repo);
-        if (!tagger.tag()) {
-          failures++;
-        }
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
+    public static void run(String... args) {
+        main(args);
     }
-      if (failures > 0) {
-          log.warn("Failures: " + failures);
-          System.exit(failures);
-      }
-  }
+
+    public static void main(String[] args) {
+        int failures = 0;
+        try {
+            Config config = Config.parse(args);
+            log.info("Config: " + config.dump());
+            for (String repo : RepoUtils.getRepos(config)) {
+                log.info(String.format("Tagging repo: %s", repo));
+                Tagger tagger = TaggerFactory.create(config, repo);
+                if (!tagger.tag()) {
+                    failures++;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (failures > 0) {
+            log.warn("Failures: " + failures);
+            System.exit(failures);
+        }
+    }
 }
