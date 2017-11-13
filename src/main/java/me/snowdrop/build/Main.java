@@ -32,6 +32,9 @@ public class Main {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    System.exit(failures);
+      if (failures > 0) {
+          log.warn("Failures: " + failures);
+          System.exit(failures);
+      }
   }
 }
