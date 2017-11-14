@@ -194,10 +194,10 @@ public class Config {
 
     public String dump() {
         String dump = "\nGoals: " + goals;
-        if (organization != null && repoRegExp != null) {
-            dump += "\nOrg: " + organization + "\nRegExp: " + repoRegExp + "\n";
-        } else if (repo != null) {
+        if (repo != null) {
             dump += "\nRepo: " + repo + "\n";
+        } else if (organization != null && repoRegExp != null) {
+            dump += "\nOrg: " + organization + "\nRegExp: " + repoRegExp + "\n";
         } else {
             dump += "\nRoot: " + root + "\nBranch: " + branch + "\nRepos: " + repos + "\n";
         }
