@@ -1,9 +1,9 @@
 package me.snowdrop.build;
 
 import me.snowdrop.build.config.Config;
-import me.snowdrop.build.config.RepoUtils;
-import me.snowdrop.build.tag.Tagger;
-import me.snowdrop.build.tag.TaggerFactory;
+import me.snowdrop.build.goals.Context;
+import me.snowdrop.build.goals.Goal;
+import me.snowdrop.build.goals.Goals;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,20 +18,22 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        int failures = 0;
+        Config config = null;
         try {
-            Config config = Config.parse(args);
-            log.info("Config: " + config.dump());
-            for (String repo : RepoUtils.getRepos(config)) {
-                log.info(String.format("Tagging repo: %s", repo));
-                Tagger tagger = TaggerFactory.create(config, repo);
-                if (!tagger.tag()) {
-                    failures++;
-                }
-            }
+            config = Config.parse(args);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Invalid config: " + e.getMessage(), e);
+            System.exit(255);
         }
+        log.info("Config: " + config.dump());
+
+        Context context = new Context(config);
+        for (String sGoal : config.getGoals()) {
+            Goal goal = Goals.getGoal(sGoal);
+            goal.run(context);
+        }
+
+        int failures = context.getStats().getFailures();
         if (failures > 0) {
             log.warn("Failures: " + failures);
             System.exit(failures);

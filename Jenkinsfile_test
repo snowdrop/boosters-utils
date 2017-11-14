@@ -2,7 +2,7 @@ node {
    def mvnHome
    stage('Preparation') {
     // Get some code from a GitHub repository
-    git "https://github.com/alesj/boosters-tag"
+    git "https://github.com/alesj/boosters-utils"
       // Get the Maven tool.
       // ** NOTE: This 'M3' Maven tool must be configured
       // **       in the global configuration.
@@ -13,6 +13,6 @@ node {
     sh "'${mvnHome}/bin/mvn' clean package"
    }
    stage('Deploy') {
-    sh "java -jar ${WORKSPACE}/target/boosters-tag-1.0.0-SNAPSHOT.jar -b=upstream -lp=${WORKSPACE} -o=alesj -t=${params.token} -r=btagtest\$5 -q=https://api.github.com/users/%s/repos"
+    sh "java -jar ${WORKSPACE}/target/boosters-utils-1.0.0-SNAPSHOT.jar -b=upstream -lp=${WORKSPACE} -o=alesj -t=${params.token} -r=btagtest\$5 -q=https://api.github.com/users/%s/repos"
    }
 }

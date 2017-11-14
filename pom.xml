@@ -20,7 +20,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>me.snowdrop.build</groupId>
-  <artifactId>boosters-tag</artifactId>
+  <artifactId>boosters-utils</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
@@ -30,8 +30,8 @@
     <version>24</version>
   </parent>
 
-  <name>Boosters Tag</name>
-  <description>Booster Tag Automation</description>
+  <name>Boosters Utils</name>
+  <description>Boosters Utils - Tags, ...</description>
 
   <properties>
     <jgit.version>4.9.0.201710071750-r</jgit.version>

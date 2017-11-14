@@ -19,7 +19,7 @@ import org.apache.http.util.EntityUtils;
 public class RepoUtils {
 
     public static Set<String> getRepos(Config config) throws Exception {
-        if (config.getRepo() != null && config.getRepo().length() > 0) {
+        if (config.getRepo() != null) {
             return Collections.singleton(config.getRepo());
         } else if (config.getOrganization() != null && config.getRepoRegExp() != null) {
             Pattern pattern = Pattern.compile(config.getRepoRegExp());

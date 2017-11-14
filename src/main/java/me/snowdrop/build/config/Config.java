@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
@@ -15,6 +16,8 @@ import java.util.TreeSet;
  */
 public class Config {
     private static final String REPOS = "https://api.github.com/orgs/%s/repos?per_page=100";
+
+    private Set<String> goals = new LinkedHashSet<>();
 
     private String root;
     private Set<String> repos = new TreeSet<>();
@@ -33,6 +36,10 @@ public class Config {
     private String tokenFile;
 
     private String localPath;
+
+    public Set<String> getGoals() {
+        return goals;
+    }
 
     public String getRoot() {
         return root;
@@ -84,10 +91,9 @@ public class Config {
 
     public static Config parse(String... args) throws Exception {
         Config config = new Config();
-        config.branch = BranchFactory.fromString(findArg(args, true, "b", "branch").toUpperCase());
 
         InputStream stream;
-        String propsURL = findArg(args, false, "c", "config");
+        String propsURL = findArg(args, "c", "config");
         if (propsURL != null) {
             stream = new URL(propsURL).openStream();
         } else {
@@ -100,6 +106,10 @@ public class Config {
             stream.close();
         }
 
+        String sGoals = findValue(args, properties, "goals", "g", "goals");
+        config.goals.addAll(Arrays.asList(sGoals.split(",")));
+
+        config.branch = BranchFactory.fromString(findValue(args, properties, "branch", "b", "branch").toUpperCase());
         config.root = findValue(args, properties, "repo.root", "root");
 
         int i = 1;
@@ -158,14 +168,20 @@ public class Config {
     }
 
     private static String findValue(String[] args, Properties properties, String key, String... prefixes) {
-        String value = findArg(args, false, prefixes);
+        String value = findArg(args, prefixes);
         if (value == null) {
-            value = properties.getProperty(key, null);
+            value = properties.getProperty(key);
+        }
+        if (value != null) {
+            value = value.trim();
+            if (value.length() == 0) {
+                value = null;
+            }
         }
         return value;
     }
 
-    private static String findArg(String[] args, boolean required, String... prefixes) {
+    private static String findArg(String[] args, String... prefixes) {
         for (String arg : args) {
             for (String prefix : prefixes) {
                 if (arg.startsWith("-" + prefix + "=")) {
@@ -173,19 +189,18 @@ public class Config {
                 }
             }
         }
-        if (required) {
-            throw new IllegalArgumentException(String.format("No such prefix found: %s", Arrays.asList(prefixes)));
-        }
         return null;
     }
 
     public String dump() {
+        String dump = "\nGoals: " + goals;
         if (organization != null && repoRegExp != null) {
-            return "\nOrg: " + organization + "\nRegExp: " + repoRegExp + "\n";
+            dump += "\nOrg: " + organization + "\nRegExp: " + repoRegExp + "\n";
         } else if (repo != null) {
-            return "\nRepo: " + repo + "\n";
+            dump += "\nRepo: " + repo + "\n";
         } else {
-            return "\nRoot: " + root + "\nBranch: " + branch + "\nRepos: " + repos + "\n";
+            dump += "\nRoot: " + root + "\nBranch: " + branch + "\nRepos: " + repos + "\n";
         }
+        return dump;
     }
 }

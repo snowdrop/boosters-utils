@@ -1,8 +1,9 @@
-# Tag your boosters!
+# Boosters Utils!
 
 Available options:
-* -b, -branch = upstream | downstream *
-* -c, -config = configuration file, if none, default.proprties from the project is used
+* -g, -goals = ordered set of goals *
+* -b, -branch = upstream | downstream | redhat | \<any\> *
+* -c, -config = configuration file, if none, default.properties from the project is used
 * -u, -user = git username **
 * -p, -pass = git password **
 * -ph, -phrase, -passphrase = ssh passphrase **
@@ -23,7 +24,7 @@ Available options:
 A config example:
 
 -b=downstream
--c=file:/Users/alesj/projects/obsidian/snowdrop/boosters-tag/test.properties
+-c=file:/Users/alesj/projects/obsidian/snowdrop/boosters-utils/test.properties
 -ph=mypazzfrajz
 
 Where test.properties looks like
@@ -33,4 +34,4 @@ Where test.properties looks like
 
 After "mvn clean install" you get a runnable uber-jar:
 
-    java -jar target/boosters-tag-1.0.0-SNAPSHOT.jar -b=upstream -c=file:/Users/alesj/projects/obsidian/snowdrop/boosters-tag/test.properties -ph=mypazzfrajz
+    java -jar target/boosters-utils-1.0.0-SNAPSHOT.jar -b=upstream -c=file:/Users/alesj/projects/obsidian/snowdrop/boosters-utils/test.properties -ph=mypazzfrajz

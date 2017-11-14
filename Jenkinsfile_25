@@ -33,7 +33,7 @@ pipeline {
        }
        stage('Deploy') {
           steps {
-              sh "java -jar ${WORKSPACE}/target/boosters-tag-${params.btagversion}.jar -b=${params.branch} -lp=${WORKSPACE} -o=${params.org} -t=${params.token} -r=${params.regexp} -q=${params.query}"
+              sh "java -jar ${WORKSPACE}/target/boosters-utils-${params.buversion}.jar -b=${params.branch} -lp=${WORKSPACE} -o=${params.org} -t=${params.token} -r=${params.regexp} -q=${params.query}"
           }
        }
    }
