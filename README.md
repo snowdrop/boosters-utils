@@ -1,3 +1,7 @@
+# DEPRECATED: use https://github.com/snowdrop/boosters-common instead
+
+---
+
 # Boosters Utils!
 
 Available options:
