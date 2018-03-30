@@ -1,4 +1,4 @@
-# DEPRECATED: use https://github.com/snowdrop/boosters-common instead
+# DEPRECATED: use https://github.com/snowdrop/booster-common instead
 
 ---
 
